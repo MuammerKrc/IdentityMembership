@@ -18,6 +18,12 @@ namespace IdentityMemberships.Controllers
 			return View();
 		}
 
+
+		public async Task<IActionResult> SignUp(string ReturnUrl = "")
+		{
+			return View();
+		}
+
 		public IActionResult Privacy()
 		{
 			return View();
@@ -28,5 +34,7 @@ namespace IdentityMemberships.Controllers
 		{
 			return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
 		}
+
+
 	}
 }
