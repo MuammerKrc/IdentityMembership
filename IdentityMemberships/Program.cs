@@ -1,7 +1,20 @@
+using IdentityStructureModel.IdentityDbContexts;
+using IdentityStructureModel.IdentityModels;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<AppIdentityDbContext>(opt =>
+{
+	opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+builder.Services.AddIdentity<AppUser, AppRole>()
+	.AddEntityFrameworkStores<AppIdentityDbContext>()
+	.AddDefaultTokenProviders();
 
 var app = builder.Build();
 
