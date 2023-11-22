@@ -9,6 +9,8 @@ namespace IdentityStructureModel.ViewModels
 {
     public class UserViewModel
     {
+        public long Id { get; set; }
+
         [Required(ErrorMessage = "Kullanıcı ismi gerekldir.")]
         [Display(Name = "Kullanıcı Adı")]
         public string UserName { get; set; }

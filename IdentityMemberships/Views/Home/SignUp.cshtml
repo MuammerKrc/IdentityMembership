@@ -3,7 +3,10 @@
 @{
 	ViewData["Title"] = "SignUp";
 }
-
+@section Scripts
+{
+	@await Html.PartialAsync("_ValidationScriptsPartial");
+}
 
 <h1>SignUp</h1>
 
@@ -12,7 +15,7 @@
 	<div class="col-md-4 offset-md-4">
 		<h4>Üye Ol Formu</h4>
 		<hr />
-		<form asp-action="SignUp" method="post">
+		<form asp-action="SignUp" method="post" >
 			<div asp-validation-summary="All" class="text-danger"></div>
 			<div class="form-group">
 				<label asp-for="UserName" class="control-label"></label>
