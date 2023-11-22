@@ -4,6 +4,6 @@ namespace IdentityMemberships.Models
 	{
 		public string? RequestId { get; set; }
 
-		public bool ShowRequestIds => !string.IsNullOrEmpty(RequestId);
+		public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
 	}
 }
