@@ -257,3 +257,4 @@ src/ZorluZone.Intranet.Mvc/wwwroot/media
 #src/ZorluZone.Intranet.Mvc/wwwroot/media/inovasyon/btn-bg/processes.svg
 src/ZorluZone.Admin.Mvc/App_Data/Logs/Logs.txt
 src/ZorluZone.Intranet.Mvc/App_Data/Logs/Logs.txt
+IdentityMemberships/appsettings.Development.json
