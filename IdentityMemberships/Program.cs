@@ -1,3 +1,4 @@
+using IdentityMemberships.CustomValidations;
 using IdentityStructureModel.IdentityDbContexts;
 using IdentityStructureModel.IdentityModels;
 using Microsoft.AspNetCore.Identity;
@@ -12,6 +13,7 @@ builder.Services.AddDbContext<AppIdentityDbContext>(opt =>
 {
 	opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
 builder.Services.AddIdentity<AppUser, AppRole>(delegate (IdentityOptions options)
 	{
 		//password
@@ -22,7 +24,7 @@ builder.Services.AddIdentity<AppUser, AppRole>(delegate (IdentityOptions options
 		options.Password.RequiredLength = 6;
 		options.Password.RequiredUniqueChars = 4;
 	})
-
+	.AddPasswordValidator<CustomPasswordValidator>()
 	.AddEntityFrameworkStores<AppIdentityDbContext>()
 	.AddDefaultTokenProviders();
 
