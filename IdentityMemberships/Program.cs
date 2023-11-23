@@ -37,6 +37,18 @@ builder.Services.AddIdentity<AppUser, AppRole>(delegate (IdentityOptions options
 	.AddEntityFrameworkStores<AppIdentityDbContext>()
 	.AddDefaultTokenProviders();
 
+builder.Services.ConfigureApplicationCookie(opt =>
+{
+	var cookieBuilder = new CookieBuilder();
+	cookieBuilder.Name = "IdentityCookies";
+
+	opt.LoginPath = new PathString("/Home/SingUp");
+	opt.Cookie = cookieBuilder;
+	opt.ExpireTimeSpan = TimeSpan.FromDays(60);
+	opt.SlidingExpiration = true;
+
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
