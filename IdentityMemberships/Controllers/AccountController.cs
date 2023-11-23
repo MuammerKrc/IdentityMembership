@@ -39,10 +39,16 @@ namespace IdentityMemberships.Controllers
 				return View(model);
 			}
 
-			SignInResult signInResult = await _signInManager.PasswordSignInAsync(user, model.Password, true, false);
+			SignInResult signInResult = await _signInManager.PasswordSignInAsync(user, model.Password, true, true);
 
 			if (!signInResult.Succeeded)
 			{
+				if (signInResult.IsLockedOut)
+				{
+					ModelState.AddModelError("", "3 kere yanlış şifre girdiğiniz için 3 dakika kitlenmiştir.");
+					return View(model);
+
+				}
 				ModelState.AddModelError("", failedExceptionDesc);
 				return View(model);
 			}

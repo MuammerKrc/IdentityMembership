@@ -25,7 +25,11 @@ builder.Services.AddIdentity<AppUser, AppRole>(delegate (IdentityOptions options
 		options.Password.RequiredLength = 6;
 		options.Password.RequiredUniqueChars = 4;
 		//user
-		options.User.RequireUniqueEmail=true;
+		options.User.RequireUniqueEmail = true;
+		//lockout-enabled
+		options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(3);
+		options.Lockout.MaxFailedAccessAttempts = 3;
+		options.Lockout.AllowedForNewUsers = true;
 	})
 	.AddPasswordValidator<CustomPasswordValidator>()
 	.AddUserValidator<CustomUserValidator>()
