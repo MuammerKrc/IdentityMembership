@@ -60,5 +60,15 @@ namespace IdentityMemberships.Controllers
 
 			return RedirectToAction("Index", "Home");
 		}
+
+		public async Task<IActionResult> SignOut()
+		{
+			if (HttpContext.User.Identity?.IsAuthenticated ?? false)
+			{
+				await _signInManager.SignOutAsync();
+			}
+
+			return RedirectToAction("Index", "Home");
+		}
 	}
 }
