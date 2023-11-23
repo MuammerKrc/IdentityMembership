@@ -1,4 +1,5 @@
 using IdentityMemberships.CustomValidations;
+using IdentityMemberships.Localizations;
 using IdentityStructureModel.IdentityDbContexts;
 using IdentityStructureModel.IdentityModels;
 using Microsoft.AspNetCore.Identity;
@@ -28,6 +29,7 @@ builder.Services.AddIdentity<AppUser, AppRole>(delegate (IdentityOptions options
 	})
 	.AddPasswordValidator<CustomPasswordValidator>()
 	.AddUserValidator<CustomUserValidator>()
+	.AddErrorDescriber<LocalizationIdentityErrorDescription>()
 	.AddEntityFrameworkStores<AppIdentityDbContext>()
 	.AddDefaultTokenProviders();
 
