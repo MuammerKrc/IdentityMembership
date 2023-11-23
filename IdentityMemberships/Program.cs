@@ -23,8 +23,11 @@ builder.Services.AddIdentity<AppUser, AppRole>(delegate (IdentityOptions options
 		options.Password.RequireNonAlphanumeric = false;
 		options.Password.RequiredLength = 6;
 		options.Password.RequiredUniqueChars = 4;
+		//user
+		options.User.RequireUniqueEmail=true;
 	})
 	.AddPasswordValidator<CustomPasswordValidator>()
+	.AddUserValidator<CustomUserValidator>()
 	.AddEntityFrameworkStores<AppIdentityDbContext>()
 	.AddDefaultTokenProviders();
 
