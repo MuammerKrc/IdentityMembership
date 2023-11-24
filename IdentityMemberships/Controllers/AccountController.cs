@@ -1,7 +1,9 @@
-﻿using IdentityStructureModel.IdentityModels;
+﻿using IdentityMemberships.Services;
+using IdentityStructureModel.IdentityModels;
 using IdentityStructureModel.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.DotNet.Scaffolding.Shared.Project;
 using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 using Microsoft.IdentityModel.Tokens;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
@@ -12,10 +14,12 @@ namespace IdentityMemberships.Controllers
 	{
 		private readonly SignInManager<AppUser> _signInManager;
 		private readonly UserManager<AppUser> _userManager;
-		public AccountController(SignInManager<AppUser> signInManager, UserManager<AppUser> userManager)
+		private readonly IEmailService _emailService;
+		public AccountController(SignInManager<AppUser> signInManager, UserManager<AppUser> userManager, IEmailService emailService)
 		{
 			_signInManager = signInManager;
 			_userManager = userManager;
+			_emailService = emailService;
 		}
 
 		public IActionResult SignIn(string ReturnUrl)
@@ -71,10 +75,43 @@ namespace IdentityMemberships.Controllers
 
 			return RedirectToAction("Index", "Home");
 		}
-		public async Task<IActionResult> ResetPassword()
+		public async Task<IActionResult> ResetPassword(string userId, string token)
 		{
+			if (userId == null || token == null)
+			{
+				return RedirectToAction("Index", "Home");
+			}
 
-			return View();
+			return View(new ResetPasswordConfirmModel() { UserId = userId, Token = token });
+		}
+		[HttpPost]
+		public async Task<IActionResult> ResetPassword(ResetPasswordConfirmModel model)
+		{
+			
+			if (!ModelState.IsValid) View(model);
+
+			var user = await _userManager.FindByIdAsync(model.UserId);
+			if (user == null)
+			{
+				ModelState.AddModelError("", "Bu kullanıcı bulunamadı.");
+				return View(model);
+			}
+
+			var result = await _userManager.ResetPasswordAsync(user, model.Token, model.PasswordNew);
+			if (!result.Succeeded)
+			{
+				result.Errors.ToList().ForEach(i =>
+				{
+					ModelState.AddModelError("", i.Description);
+				});
+				return View(model);
+			}
+
+			await _userManager.UpdateSecurityStampAsync(user);
+			model.Success = true;
+			ViewBag.status = "success";
+			return View(model);
+
 		}
 		public async Task<IActionResult> ForgetPassword()
 		{
@@ -99,12 +136,12 @@ namespace IdentityMemberships.Controllers
 			{
 				userId = user.Id,
 				token = token
-			});
+			}, HttpContext.Request.Scheme, "localhost:44344");
 
-			// send token de email,
+
 
 			TempData["success"] = "Şifre yenileme linki, eposta adresinize gönderilmiştir";
-
+			await _emailService.SendForgetEmail(user.Email, passwordRestLink);
 
 
 			return RedirectToAction("ForgetPassword");

@@ -1,6 +1,7 @@
 ﻿namespace IdentityMemberships.Services
 {
-	public class IEmailService
+	public interface IEmailService
 	{
+		Task SendForgetEmail(string toEmail, string link);
 	}
 }

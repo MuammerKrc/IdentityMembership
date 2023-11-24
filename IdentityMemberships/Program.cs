@@ -1,9 +1,13 @@
+using IdentityMemberships.ConfigurationModels;
 using IdentityMemberships.CustomValidations;
 using IdentityMemberships.Localizations;
+using IdentityMemberships.Services;
 using IdentityStructureModel.IdentityDbContexts;
 using IdentityStructureModel.IdentityModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +19,8 @@ builder.Services.AddDbContext<AppIdentityDbContext>(opt =>
 	opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
-
+builder.Services.Configure<EmailConfigurationModel>(builder.Configuration.GetSection("EmailSettings"));
+builder.Services.AddScoped<IEmailService, EmailService>();
 //Identity için olu?turulan token süresi reset password change email
 builder.Services.Configure<DataProtectionTokenProviderOptions>(opt =>
 {
@@ -38,9 +43,9 @@ builder.Services.AddIdentity<AppUser, AppRole>(delegate (IdentityOptions options
 		options.Lockout.MaxFailedAccessAttempts = 3;
 		options.Lockout.AllowedForNewUsers = true;
 	})
-	.AddPasswordValidator<CustomPasswordValidator>()
-	.AddUserValidator<CustomUserValidator>()
-	.AddErrorDescriber<LocalizationIdentityErrorDescription>()
+	//.AddPasswordValidator<CustomPasswordValidator>()
+	//.AddUserValidator<CustomUserValidator>()
+	//.AddErrorDescriber<LocalizationIdentityErrorDescription>()
 	.AddDefaultTokenProviders()
 
 	.AddEntityFrameworkStores<AppIdentityDbContext>();
