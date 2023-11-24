@@ -2,6 +2,7 @@
 using IdentityStructureModel.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 using Microsoft.IdentityModel.Tokens;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
@@ -70,5 +71,44 @@ namespace IdentityMemberships.Controllers
 
 			return RedirectToAction("Index", "Home");
 		}
+		public async Task<IActionResult> ResetPassword()
+		{
+
+			return View();
+		}
+		public async Task<IActionResult> ForgetPassword()
+		{
+
+			return View();
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> ForgetPassword(ForgetPasswordViewModel viewModel)
+		{
+			var user = await _userManager.FindByEmailAsync(viewModel.Email);
+
+			if (user == null)
+			{
+
+				ModelState.AddModelError("", "Böyle bir kullanıcı bulunamadı");
+				return View(viewModel);
+
+			}
+			var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+			var passwordRestLink = Url.Action("ResetPassword", "Account", new
+			{
+				userId = user.Id,
+				token = token
+			});
+
+			// send token de email,
+
+			TempData["success"] = "Şifre yenileme linki, eposta adresinize gönderilmiştir";
+
+
+
+			return RedirectToAction("ForgetPassword");
+		}
+
 	}
 }

@@ -1,6 +1,6 @@
 ﻿@model IdentityStructureModel.ViewModels.LoginViewModel
 @{
-    ViewData["Title"] = "SignIn";
+	ViewData["Title"] = "SignIn";
 }
 
 
@@ -23,7 +23,9 @@
 			<div class="form-group">
 				<input type="checkbox" asp-for="RememberMe" /> Beni Hatırla
 			</div>
-
+			<div class="form-group">
+				<a asp-action="ForgetPassword">Şifremi Unuttum</a>
+			</div>
 			<div class="form-group">
 				<input type="submit" value="Giriş yap" class="btn btn-primary" />
 			</div>

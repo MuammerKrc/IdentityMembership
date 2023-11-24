@@ -15,6 +15,13 @@ builder.Services.AddDbContext<AppIdentityDbContext>(opt =>
 	opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
+
+//Identity için olu?turulan token süresi reset password change email
+builder.Services.Configure<DataProtectionTokenProviderOptions>(opt =>
+{
+	opt.TokenLifespan = TimeSpan.FromMinutes(10);
+});
+
 builder.Services.AddIdentity<AppUser, AppRole>(delegate (IdentityOptions options)
 	{
 		//password
@@ -34,15 +41,16 @@ builder.Services.AddIdentity<AppUser, AppRole>(delegate (IdentityOptions options
 	.AddPasswordValidator<CustomPasswordValidator>()
 	.AddUserValidator<CustomUserValidator>()
 	.AddErrorDescriber<LocalizationIdentityErrorDescription>()
-	.AddEntityFrameworkStores<AppIdentityDbContext>()
-	.AddDefaultTokenProviders();
+	.AddDefaultTokenProviders()
+
+	.AddEntityFrameworkStores<AppIdentityDbContext>();
 
 builder.Services.ConfigureApplicationCookie(opt =>
 {
 	var cookieBuilder = new CookieBuilder();
 	cookieBuilder.Name = "IdentityCookies";
 
-	opt.LoginPath = new PathString("/Home/SingUp");
+	opt.LoginPath = new PathString("/Account/SignIn");
 	opt.Cookie = cookieBuilder;
 	opt.ExpireTimeSpan = TimeSpan.FromDays(60);
 	opt.SlidingExpiration = true;
@@ -63,7 +71,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 
