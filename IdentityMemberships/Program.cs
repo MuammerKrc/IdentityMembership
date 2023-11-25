@@ -1,6 +1,7 @@
 using IdentityMemberships.ConfigurationModels;
 using IdentityMemberships.CustomValidations;
 using IdentityMemberships.Localizations;
+using IdentityMemberships.ServiceCollectionExtensions;
 using IdentityMemberships.Services;
 using IdentityStructureModel.IdentityDbContexts;
 using IdentityStructureModel.IdentityModels;
@@ -19,48 +20,11 @@ builder.Services.AddDbContext<AppIdentityDbContext>(opt =>
 	opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
-builder.Services.Configure<EmailConfigurationModel>(builder.Configuration.GetSection("EmailSettings"));
-builder.Services.AddScoped<IEmailService, EmailService>();
-//Identity için olu?turulan token süresi reset password change email
-builder.Services.Configure<DataProtectionTokenProviderOptions>(opt =>
-{
-	opt.TokenLifespan = TimeSpan.FromMinutes(10);
-});
-
-builder.Services.AddIdentity<AppUser, AppRole>(delegate (IdentityOptions options)
-	{
-		//password
-		options.Password.RequireDigit = false;
-		options.Password.RequireLowercase = false;
-		options.Password.RequireUppercase = false;
-		options.Password.RequireNonAlphanumeric = false;
-		options.Password.RequiredLength = 6;
-		options.Password.RequiredUniqueChars = 4;
-		//user
-		options.User.RequireUniqueEmail = true;
-		//lockout-enabled
-		options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(3);
-		options.Lockout.MaxFailedAccessAttempts = 3;
-		options.Lockout.AllowedForNewUsers = true;
-	})
-	.AddPasswordValidator<CustomPasswordValidator>()
-	.AddUserValidator<CustomUserValidator>()
-	.AddErrorDescriber<LocalizationIdentityErrorDescription>()
-	.AddDefaultTokenProviders()
-
-	.AddEntityFrameworkStores<AppIdentityDbContext>();
-
-builder.Services.ConfigureApplicationCookie(opt =>
-{
-	var cookieBuilder = new CookieBuilder();
-	cookieBuilder.Name = "IdentityCookies";
-
-	opt.LoginPath = new PathString("/Account/SignIn");
-	opt.Cookie = cookieBuilder;
-	opt.ExpireTimeSpan = TimeSpan.FromDays(60);
-	opt.SlidingExpiration = true;
-
-});
+builder.Services.ModelConfigureExtensions(builder.Configuration);
+builder.Services.DIConfigurationExtensions();
+builder.Services.IdentityConfigurationExtensions();
+builder.Services.CookieConfigurationExtensions();
+builder.Services.AddStaticRolesConfigurationExtensions();
 
 var app = builder.Build();
 
