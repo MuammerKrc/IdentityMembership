@@ -1,0 +1,47 @@
+﻿@model IdentityStructureModel.ViewModels.UserViewModel
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+<h1>Index</h1>
+
+<h3 class="text-center">Kullanıcı Bilgileri</h3>
+<div class="row">
+    <div class="col-sm-3">
+        @if (string.IsNullOrEmpty(Model.Picture))
+        {
+            <img style="width: 100%; height: 100%" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJ44P7Ea5fLE_9lGe22SVGSOJTP_bLdkc9PX1GxBXMTw&s" />
+        }
+        else
+        {
+            <img style="width:100%; height:100%" src="@Model.Picture" />
+        }
+    </div>
+    <div class="col-sm-9">
+
+        <table class="table table-bordered table-striped">
+            <tr>
+                <th>Kullanıcı ismi</th>
+                <td>@Model.UserName</td>
+            </tr>
+            <tr>
+                <th>E-posta</th>
+                <td>@Model.Email</td>
+            </tr>
+            <tr>
+                <th>City</th>
+                <td>
+                    @if (!String.IsNullOrEmpty(Model.City))
+                    {
+                        @Model.City
+                    }
+                    else
+
+                    {
+                        <span>belirtilmemiş</span>
+                    }
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>

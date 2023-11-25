@@ -43,9 +43,9 @@ builder.Services.AddIdentity<AppUser, AppRole>(delegate (IdentityOptions options
 		options.Lockout.MaxFailedAccessAttempts = 3;
 		options.Lockout.AllowedForNewUsers = true;
 	})
-	//.AddPasswordValidator<CustomPasswordValidator>()
-	//.AddUserValidator<CustomUserValidator>()
-	//.AddErrorDescriber<LocalizationIdentityErrorDescription>()
+	.AddPasswordValidator<CustomPasswordValidator>()
+	.AddUserValidator<CustomUserValidator>()
+	.AddErrorDescriber<LocalizationIdentityErrorDescription>()
 	.AddDefaultTokenProviders()
 
 	.AddEntityFrameworkStores<AppIdentityDbContext>();
