@@ -40,9 +40,6 @@ namespace IdentityMemberships.Controllers
 			}
 
 			var user = model.CreateUser();
-			user.City = "asd";
-			user.Picture = "akkaka";
-			user.Gender = Gender.Man;
 			IdentityResult result = await _userManager.CreateAsync(user, model.Password);
 			if (!result.Succeeded)
 			{
@@ -52,7 +49,7 @@ namespace IdentityMemberships.Controllers
 				return View(model);
 			}
 
-			return RedirectToAction("SignIn","Account");
+			return RedirectToAction("SignIn", "Account");
 		}
 
 		public IActionResult Privacy()
