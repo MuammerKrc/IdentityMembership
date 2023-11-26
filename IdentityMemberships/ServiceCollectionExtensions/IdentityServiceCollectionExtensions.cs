@@ -42,8 +42,16 @@ namespace IdentityMemberships.ServiceCollectionExtensions
 				.AddUserValidator<CustomUserValidator>()
 				.AddErrorDescriber<LocalizationIdentityErrorDescription>()
 				.AddDefaultTokenProviders()
-
 				.AddEntityFrameworkStores<AppIdentityDbContext>();
+
+			//Add Ankara Policy Here
+			Services.AddAuthorization(options =>
+			{
+				options.AddPolicy("AnkaraPolicy", policy =>
+				{
+					policy.RequireClaim("city", "Ankara");
+				});
+			});
 		}
 	}
 }

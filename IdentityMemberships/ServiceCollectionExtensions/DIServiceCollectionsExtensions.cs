@@ -1,4 +1,6 @@
-﻿using IdentityMemberships.Services;
+﻿using IdentityMemberships.ClaimProviders;
+using IdentityMemberships.Services;
+using Microsoft.AspNetCore.Authentication;
 
 namespace IdentityMemberships.ServiceCollectionExtensions
 {
@@ -7,6 +9,7 @@ namespace IdentityMemberships.ServiceCollectionExtensions
 		public static void DIConfigurationExtensions(this IServiceCollection Services)
 		{
 			Services.AddScoped<IEmailService, EmailService>();
+			Services.AddScoped<IClaimsTransformation, ClaimProvider>();
 		}
 	}
 }
