@@ -1,6 +1,6 @@
 ﻿namespace IdentityMemberships.RoleProviderNames
 {
-	public class RoleProviderName
+	public  class RoleProviderName
 	{
 		//admin Role
 		public static string AdminRole = "AdminRole";

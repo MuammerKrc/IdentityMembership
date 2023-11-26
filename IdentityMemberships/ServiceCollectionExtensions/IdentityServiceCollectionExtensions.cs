@@ -17,6 +17,10 @@ namespace IdentityMemberships.ServiceCollectionExtensions
 			{
 				opt.TokenLifespan = TimeSpan.FromMinutes(10);
 			});
+			//Services.Configure<SecurityStampValidatorOptions>(options =>
+			//{
+			//	options.ValidationInterval = TimeSpan.FromSeconds(10);
+			//});
 
 			Services.AddIdentity<AppUser, AppRole>(delegate (IdentityOptions options)
 				{

@@ -11,6 +11,7 @@ namespace IdentityMemberships.ServiceCollectionExtensions
 	{
 		public static void AddStaticRolesConfigurationExtensions(this IServiceCollection collection)
 		{
+
 			var serviceProvider = collection.BuildServiceProvider();
 			using (var roleManager = serviceProvider.GetService<RoleManager<AppRole>>())
 			{

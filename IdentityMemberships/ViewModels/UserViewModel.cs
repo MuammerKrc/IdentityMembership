@@ -30,6 +30,7 @@ namespace IdentityStructureModel.ViewModels
         public string City { get; set; }
 
         public Gender Gender { get; set; }
+        public List<string> Roles { get; set; } = new List<string>();
         public void UpdateUser(AppUser user)
         {
             user.UserName = UserName;

@@ -1,0 +1,25 @@
+﻿@model IdentityStructureModel.ViewModels.RoleAssignViewModel
+@{
+	ViewData["Title"] = "RoleAppend";
+}
+
+<h3>Kullanıcıya rol atama @(Model.UserName)</h3>
+<hr />
+<form asp-area="Admin" asp-controller="Role" asp-action="RoleAssign" method="post">
+
+	<input type="hidden" asp-for="UserId" />
+	<input type="hidden" asp-for="UserName" />
+
+	@for (var i = 0; i < Model.RoleExistViewModels.Count; i++)
+	{
+		<div class="form-check">
+			<input asp-for="@Model.RoleExistViewModels[i].Exist" type="checkbox" class="form-check-input" />
+			<label asp-for="@Model.RoleExistViewModels[i].RoleId" class="form-check-label">@Model.RoleExistViewModels[i].RoleName</label>
+
+			<input asp-for="@Model.RoleExistViewModels[i].RoleName" type="hidden" />
+			<input asp-for="@Model.RoleExistViewModels[i].RoleId" type="hidden" />
+		</div>
+	}
+
+	<input class="btn btn-success" type="submit" value="Rol ata" />
+</form>

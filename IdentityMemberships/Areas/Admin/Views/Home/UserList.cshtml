@@ -1,6 +1,7 @@
-﻿@model List<IdentityStructureModel.ViewModels.UserViewModel>
+﻿@using Microsoft.AspNetCore.Razor.TagHelpers
+@model List<IdentityStructureModel.ViewModels.UserViewModel>
 @{
-    ViewData["Title"] = "UserList";
+	ViewData["Title"] = "UserList";
 }
 
 
@@ -29,8 +30,13 @@
 				<td>@item.Id</td>
 				<td>@item.UserName</td>
 				<td>@item.Email</td>
-				<td user-roles="@item.Id"></td>
-				<td> <a class="btn btn-success" asp-action="RoleAssignToUser" asp-route-id="@item.Id">Role ata</a></td>
+				<td>
+					@foreach (var role in item.Roles)
+					{
+						@(role + ", ")
+					}
+				</td>
+				<td> <a class="btn btn-success" asp-action="RoleAssign" asp-controller="Role" asp-area="Admin" asp-route-userId="@item.Id">Role ata</a></td>
 			</tr>
 		}
 	}

@@ -6,7 +6,13 @@ namespace IdentityMemberships.ServiceCollectionExtensions
 	{
 		public static void CookieConfigurationExtensions(this IServiceCollection Services)
 		{
-
+			//Services.AddAuthentication(options =>
+			//{
+			//	options.
+			//} ).AddCookie(options =>
+			//{
+			//	options.
+			//} )
 			Services.ConfigureApplicationCookie(opt =>
 			{
 				var cookieBuilder = new CookieBuilder();
