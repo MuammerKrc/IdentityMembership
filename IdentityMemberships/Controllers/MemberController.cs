@@ -1,4 +1,5 @@
-﻿using IdentityStructureModel.IdentityModels;
+﻿using System.Security.Claims;
+using IdentityStructureModel.IdentityModels;
 using IdentityStructureModel.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -113,9 +114,19 @@ namespace IdentityMemberships.Controllers
 				});
 				return View(model);
 			}
+
+
 			await _userManager.UpdateSecurityStampAsync(user);
 			await _signInManager.SignOutAsync();
-			await _signInManager.SignInAsync(user, true);
+			if (user.Birthday.HasValue)
+			{
+				await _signInManager.SignInWithClaimsAsync(user, true, additionalClaims: new List<Claim>() { new Claim("Birthday", user.Birthday.HasValue ? user.Birthday.Value.ToString() : DateTime.Now.ToString()) });
+			}
+			else
+			{
+				await _signInManager.SignInAsync(user, true);
+
+			}
 			ViewBag.success = "true";
 			return View(model);
 		}

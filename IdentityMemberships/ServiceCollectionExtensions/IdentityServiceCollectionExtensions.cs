@@ -46,6 +46,7 @@ namespace IdentityMemberships.ServiceCollectionExtensions
 				.AddDefaultTokenProviders()
 				.AddEntityFrameworkStores<AppIdentityDbContext>();
 
+
 			//Add Ankara Policy Here
 			Services.AddAuthorization(options =>
 			{
@@ -65,8 +66,18 @@ namespace IdentityMemberships.ServiceCollectionExtensions
 					});
 				});
 
+				//claims baslı authorizationn için oluşturuldu ancak bu db üzerinde tutulmaz
+				options.AddPolicy("BirthdayExchange", policy =>
+				{
+					policy.AddRequirements(new BirthdayRequirements()
+					{
+						//sınıf içerisinde property örneklemesini yaptık.
+						Threshold = 30
+					});
+				});
 			});
 			Services.AddScoped<IAuthorizationHandler, ExchangeExpireRequirementsHandler>();
+			Services.AddScoped<IAuthorizationHandler, BirthdayRequirementsHandler>();
 		}
 	}
 }

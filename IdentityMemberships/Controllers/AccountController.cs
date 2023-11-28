@@ -65,9 +65,8 @@ namespace IdentityMemberships.Controllers
 				ModelState.AddModelError("", failedExceptionDesc);
 				return View(model);
 			}
-			await _signInManager.SignInWithClaimsAsync(user, true, new List<Claim>());
 
-
+			await _signInManager.SignInWithClaimsAsync(user, true, new List<Claim>() { new Claim("Birthday", user.Birthday.HasValue ? user.Birthday.Value.ToString() : DateTime.Now.ToString()) });
 
 
 			if (TempData["ReturnUrl"] != null && !string.IsNullOrEmpty(TempData["ReturnUrl"].ToString()))

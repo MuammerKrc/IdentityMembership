@@ -25,7 +25,11 @@ namespace IdentityMemberships.Controllers
 		{
 			return View();
 		}
-
+		[Authorize("BirthdayExchange")]
+		public IActionResult BirthdayPolicyAuthorize()
+		{
+			return View();
+		}
 
 	}
 }
