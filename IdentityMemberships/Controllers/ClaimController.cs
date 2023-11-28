@@ -13,10 +13,19 @@ namespace IdentityMemberships.Controllers
 
 			return View(claims);
 		}
+		//claim authrozitaion 
 		[Authorize("AnkaraPolicy")]
 		public IActionResult AnkaraPolicyAuthorize()
 		{
 			return View();
 		}
+		//policy authrozitaion
+		[Authorize("ExchangePolicy")]
+		public IActionResult ExpiredDatePolicyAuthorize()
+		{
+			return View();
+		}
+
+
 	}
 }

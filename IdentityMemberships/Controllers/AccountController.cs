@@ -1,4 +1,5 @@
-﻿using IdentityMemberships.Services;
+﻿using System.Security.Claims;
+using IdentityMemberships.Services;
 using IdentityStructureModel.IdentityModels;
 using IdentityStructureModel.ViewModels;
 using Microsoft.AspNetCore.Identity;
@@ -44,19 +45,30 @@ namespace IdentityMemberships.Controllers
 				return View(model);
 			}
 
-			SignInResult signInResult = await _signInManager.PasswordSignInAsync(user, model.Password, true, true);
 
+
+			//********************
+			//ClaimOlmadan Giriş Yapıldığında Aşağıdaki kullanılabilir.
+			//SignInResult signInResult = await _signInManager.PasswordSignInAsync(user, model.Password, true, true);
+
+			//********************
+			//Claim ile giriş yapmak istediğimde aşağıdaki gibi giriş yapacağım.
+
+			var signInResult = await _signInManager.CheckPasswordSignInAsync(user, model.Password, true);
 			if (!signInResult.Succeeded)
 			{
 				if (signInResult.IsLockedOut)
 				{
 					ModelState.AddModelError("", "3 kere yanlış şifre girdiğiniz için 3 dakika kitlenmiştir.");
 					return View(model);
-
 				}
 				ModelState.AddModelError("", failedExceptionDesc);
 				return View(model);
 			}
+			await _signInManager.SignInWithClaimsAsync(user, true, new List<Claim>());
+
+
+
 
 			if (TempData["ReturnUrl"] != null && !string.IsNullOrEmpty(TempData["ReturnUrl"].ToString()))
 			{
@@ -87,7 +99,7 @@ namespace IdentityMemberships.Controllers
 		[HttpPost]
 		public async Task<IActionResult> ResetPassword(ResetPasswordConfirmModel model)
 		{
-			
+
 			if (!ModelState.IsValid) View(model);
 
 			var user = await _userManager.FindByIdAsync(model.UserId);

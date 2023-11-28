@@ -1,7 +1,9 @@
 ﻿using IdentityMemberships.CustomValidations;
 using IdentityMemberships.Localizations;
+using IdentityMemberships.PolicyProvider;
 using IdentityStructureModel.IdentityDbContexts;
 using IdentityStructureModel.IdentityModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 
 namespace IdentityMemberships.ServiceCollectionExtensions
@@ -47,11 +49,24 @@ namespace IdentityMemberships.ServiceCollectionExtensions
 			//Add Ankara Policy Here
 			Services.AddAuthorization(options =>
 			{
+				//claims authroization için policy oluşturuldu
 				options.AddPolicy("AnkaraPolicy", policy =>
 				{
 					policy.RequireClaim("city", "Ankara");
 				});
+
+				//policy authroization için policy oluşturuldu
+				options.AddPolicy("ExchangePolicy", policy =>
+				{
+					policy.AddRequirements(new ExchangeExpireRequirements()
+					{
+						//sınıf içerisinde property örneklemesini yaptık.
+						GetProp = 12
+					});
+				});
+
 			});
+			Services.AddScoped<IAuthorizationHandler, ExchangeExpireRequirementsHandler>();
 		}
 	}
 }

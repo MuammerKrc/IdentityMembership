@@ -1,8 +1,10 @@
 ﻿using IdentityMemberships.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Security.Claims;
 using IdentityStructureModel.IdentityModels;
 using IdentityStructureModel.ViewModels;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
@@ -48,6 +50,9 @@ namespace IdentityMemberships.Controllers
 
 				return View(model);
 			}
+			//Bunu policy based authorization için kullanıyoruz bu db üzerinde yer alacak
+			var exchangeClaim = new Claim("ExchangeExpireDate", DateTime.Now.AddMinutes(10).ToString());
+			await _userManager.AddClaimAsync(user, exchangeClaim);
 
 			return RedirectToAction("SignIn", "Account");
 		}
